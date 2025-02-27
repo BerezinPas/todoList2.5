@@ -1,0 +1,41 @@
+.item {
+	padding: 16px;
+	font-size: 17px;
+	color: #121212;
+	border-radius: 12px;
+	background-color: #f3efee;
+	margin-bottom: 16px;
+	&.completed {
+		opacity: 0.4;
+	}
+}
+.checkbox {
+	display: inline-block;
+	margin-right: 1em;
+	cursor: pointer;
+}
+.checkboxInput {
+	display: none;
+	&:checked + .checkboxFake {
+		background-color: #393433;
+		border: 2px solid #393433;
+
+		& .checkMark {
+			opacity: 1;
+		}
+	}
+}
+
+.checkboxFake {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 24px;
+	height: 24px;
+	border: 2px solid #9f9f9f;
+	border-radius: 6px;
+	transition: 0.25s;
+}
+.checkMark {
+	opacity: 0;
+}

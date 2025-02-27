@@ -1,0 +1,35 @@
+.container {
+	max-width: 1050px;
+	margin: 0 auto;
+	padding: 0 15px;
+}
+
+.todolist {
+	margin-top: 50px;
+}
+.title {
+	font-size: 36px;
+	margin-bottom: 1em;
+}
+
+.loader {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 25px;
+	height: 25px;
+	border: 5px solid gray;
+	border-radius: 50%;
+	border-left-color: transparent;
+	animation: loader 1s infinite;
+}
+
+@keyframes loader {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
