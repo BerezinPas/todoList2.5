@@ -1,0 +1,25 @@
+.formSearch {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	margin-bottom: 1em;
+	position: relative;
+}
+.inputAdd {
+	flex: 1 1 100%;
+	padding: 16px 43px 16px;
+	border: 1px solid #393433;
+	border-radius: 20px;
+}
+.searchIcon {
+	position: absolute;
+	top: 50%;
+	left: 16px;
+	transform: translateY(-50%);
+}
+.clearBtn {
+	position: absolute;
+	top: 50%;
+	right: 16px;
+	transform: translateY(-50%);
+}

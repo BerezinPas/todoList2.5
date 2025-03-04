@@ -1,0 +1,27 @@
+.title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 22px;
+	font-weight: 600;
+	margin-bottom: 1em;
+}
+
+.sortCheckbox {
+	color: #393433;
+	font-size: 24px;
+	line-height: 1;
+
+	width: 36px;
+	height: 36px;
+	border: 0px solid #9f9f9f;
+	border-radius: 6px;
+	transition: 0.25s;
+	border-radius: 10px;
+
+	input[type='checkbox']:checked + & {
+		color: #393433;
+		background-color: rgb(223, 189, 67);
+		border: 0px solid #393433;
+	}
+}

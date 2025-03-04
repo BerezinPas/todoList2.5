@@ -1,0 +1,36 @@
+.formAddTodo {
+	position: sticky;
+	// padding: 10px 0;
+	bottom: 50px;
+	// flex: 1 0 100%;
+	left: 0;
+	width: 100%;
+
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	background-color: #fff;
+	border-radius: 12px;
+	margin-top: auto;
+}
+.addBtn {
+	color: #f9f5f4;
+	// height: 60px;
+	padding: 15px 21px;
+	font-size: 18px;
+	line-height: 22px;
+	border-radius: 12px;
+	background-color: #393433;
+	box-shadow: 1px 8px 20px rgba(0, 0, 0, 0.4);
+}
+.inputAdd {
+	flex: 1 0 auto;
+	padding: 16px;
+	font-size: 17px;
+	color: #121212;
+	border-radius: 12px;
+	background-color: #f3efee;
+	margin-right: 12px;
+	box-shadow: 1px 8px 20px rgba(0, 0, 0, 0.4);
+}
