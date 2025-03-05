@@ -19,7 +19,9 @@ function App() {
 	const [searchValue, setSearchValue] = useState('');
 	const [shouldSort, setShouldSort] = useState(false);
 
-	const filtredTodos = todos.filter(({ title }) => title.includes(searchValue));
+	const filtredTodos = todos.filter(({ title }) =>
+		title.toLowerCase().includes(searchValue.toLowerCase()),
+	);
 
 	let content;
 	if (isloading) {

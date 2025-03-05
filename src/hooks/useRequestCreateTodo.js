@@ -1,24 +1,13 @@
-import { URL } from '../constants';
+import { ref, push } from 'firebase/database';
+import { db } from '../firebase';
 
-export const useRequestCreateTodo = (setTodos) => {
-	// const [isCreating, setIsCreating] = useState(false);
+export const useRequestCreateTodo = () => {
 	const createTodo = (title) => {
-		// setIsCreating(true);
-		const url = URL;
-		fetch(url, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
-			body: JSON.stringify({
-				title,
-				completed: false,
-			}),
-		})
-			.then((responce) => responce.json())
-			.then((newTodo) => {
-				console.log(newTodo, 'createTodo');
-				setTodos((prev) => [...prev, newTodo]);
-			});
-		// .finally(() => setIsCreating(false));
+		const todosDbRef = ref(db, 'todos');
+		push(todosDbRef, {
+			title,
+			completed: false,
+		});
 	};
 
 	return { createTodo };

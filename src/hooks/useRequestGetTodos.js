@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { URL } from '../constants';
+import { ref, onValue } from 'firebase/database';
+import { db } from '../firebase';
 
 export const useRequestGetTodos = () => {
 	const [todos, setTodos] = useState([]);
@@ -7,15 +8,17 @@ export const useRequestGetTodos = () => {
 
 	useEffect(() => {
 		setIsloading(true);
-		fetch(URL)
-			.then((responce) => responce.json())
-			.then((loadedData) => {
-				console.log('useRequestGetTodos', loadedData);
-
-				setTodos(loadedData);
-			})
-			.catch((error) => console.log(error))
-			.finally(() => setIsloading(false));
+		const todosDbRef = ref(db, 'todos');
+		return onValue(todosDbRef, (snapshot) => {
+			const loadeadTodos = snapshot.val();
+			console.log(loadeadTodos);
+			setTodos(
+				Object.entries(loadeadTodos || {}).map(([id, { title, completed }]) => {
+					return { id, title, completed };
+				}),
+			);
+			setIsloading(false);
+		});
 	}, []);
 	return { todos, setIsloading, isloading, setTodos };
 };
