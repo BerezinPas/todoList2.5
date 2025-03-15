@@ -7,7 +7,7 @@ export const useRequestSetTodo = (setTodos) => {
 	const setTodo = (id, title, completed) => {
 		// setIsUpdating(true);
 		const url = `${URL}/${id}`;
-		fetch(url, {
+		return fetch(url, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json;charset=utf-8' },
 			body: JSON.stringify({

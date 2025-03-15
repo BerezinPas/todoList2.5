@@ -9,7 +9,7 @@ export const useRequestDeleteTodo = (setTodos) => {
 		const url = `${URL}/${id}`;
 		console.log('url', url);
 
-		fetch(url, {
+		return fetch(url, {
 			method: 'DELETE',
 		}).then((responce) => {
 			console.log('responce delete', responce);

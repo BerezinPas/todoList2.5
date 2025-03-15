@@ -1,0 +1,21 @@
+.todolist {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	min-height: 100vh;
+	max-height: 100vh;
+	// overflow-y: a;
+	// padding-bottom: 190px;
+}
+.todos {
+	margin-bottom: 50px;
+	overflow-y: auto;
+}
+.title {
+	font-size: 36px;
+	margin-bottom: 1em;
+}
+.sortBtn {
+	margin-left: auto;
+	color: red;
+}

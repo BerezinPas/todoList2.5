@@ -1,6 +1,6 @@
 import styles from './checkbox.module.scss';
 
-export const Checkbox = ({ checked, setChecked, icon, className }) => {
+export const Checkbox = ({ checked, setChecked, icon, className, text }) => {
 	return (
 		<label className={`${styles.checkbox}`} onClick={() => setChecked()}>
 			<input
@@ -11,6 +11,7 @@ export const Checkbox = ({ checked, setChecked, icon, className }) => {
 				className={styles.checkboxInput}
 			/>
 			<div className={` ${className} ${styles.checkboxFake}`}>{icon}</div>
+			{text}
 		</label>
 	);
 };

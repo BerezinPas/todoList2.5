@@ -1,6 +1,8 @@
 .checkbox {
-	display: inline-block;
-	margin-right: 1em;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	// margin-right: 1em;
 	cursor: pointer;
 }
 .checkboxInput {
@@ -13,7 +15,7 @@
 	}
 }
 .checkboxFake {
-	display: flex;
+	display: inline-flex;
 	justify-content: center;
 	align-items: center;
 	width: 24px;
@@ -22,4 +24,5 @@
 	border-radius: 6px;
 	transition: 0.25s;
 	color: transparent;
+	margin-right: 10px;
 }

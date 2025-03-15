@@ -1,6 +1,11 @@
 import styles from './controlBtns.module.scss';
 
-export const ControlBtns = ({ handleRedact, handleDelete }) => {
+export const ControlBtns = ({
+	handleRedact,
+	textRedactBtn,
+	handleDelete,
+	textDeleteBtn,
+}) => {
 	return (
 		<>
 			<button onClick={() => handleRedact()} className={styles.editBtn}>
@@ -16,6 +21,7 @@ export const ControlBtns = ({ handleRedact, handleDelete }) => {
 						fill="#DFBD43"
 					/>
 				</svg>
+				<span>{textRedactBtn}</span>
 			</button>
 			<button onClick={handleDelete} className={styles.deleteBtn}>
 				<svg
@@ -30,6 +36,7 @@ export const ControlBtns = ({ handleRedact, handleDelete }) => {
 						fill="#DFBD43"
 					/>
 				</svg>
+				<span>{textDeleteBtn}</span>
 			</button>
 		</>
 	);

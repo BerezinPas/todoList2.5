@@ -4,10 +4,14 @@
 }
 .inputEdit {
 	flex: 1 1 auto;
-	background-color: transparent;
+	// background-color: transparent;
+	background-color: #f3efee;
+	border-radius: 12px;
+	padding: 16px;
 }
 
 .changeBtn {
+	align-self: center;
 	margin-left: 10px;
 	color: #393433;
 	padding: 5px 10px;
