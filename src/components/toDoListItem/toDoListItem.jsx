@@ -1,97 +1,78 @@
-import { useEffect, useRef, useState } from 'react';
-import { STATE_TODO } from '../../constants';
+import { useEffect, useRef } from 'react';
 import { FormEditTodo, ControlBtns, Checkbox } from '../../components';
 
 import styles from './toDoListItem.module.scss';
+import { useStateManager } from '../../stateManager';
+import { requestSetTodo } from '../../api';
 
-export const ToDoListItem = ({
-	title,
-	completed,
-	deleteTodo,
-	setTodo,
-	...props
-}) => {
-	const [value, setValue] = useState('');
-	const [stateTodo, setStateTodo] = useState(STATE_TODO.IS_READY);
+export const ToDoListItem = ({ title, completed, id, ...props }) => {
+	const { setTodo: setTodoFetch } = requestSetTodo();
+
+	const { updateTodo, updateState, state } = useStateManager();
+	const { inputEditTodoValue, uddatingTodosIDs, redactingTodoID } = state;
+
+	const setTodo = (title, completed) => {
+		updateState('uddatingTodosIDs', [...uddatingTodosIDs, id]);
+
+		setTodoFetch(id, title, completed).then((updatedTodo) => {
+			updateTodo(updatedTodo);
+		});
+	};
 
 	const validateInput = (val) => {
 		if (val && val !== title) {
 			setTodo(val, completed);
-			setStateTodo(STATE_TODO.IS_UPDATING);
-		} else {
-			setStateTodo(STATE_TODO.IS_READY);
 		}
 	};
 
 	const onSubmitEditTodo = (e) => {
 		e.preventDefault();
-		console.log('val', value);
-		validateInput(value.trim());
-		setValue('');
+		validateInput(inputEditTodoValue.trim());
+		updateState('inputEditTodoValue', '');
 	};
-
-	useEffect(() => {
-		setStateTodo(STATE_TODO.IS_READY);
-	}, [title, completed]);
 
 	const inputRedactRef = useRef(null);
 
 	useEffect(() => {
-		if (stateTodo === STATE_TODO.IS_REDACTING && inputRedactRef.current) {
+		if (id === redactingTodoID && inputRedactRef.current) {
 			inputRedactRef.current.focus();
 		}
-	}, [stateTodo]);
+	}, [redactingTodoID]);
 
 	let content = '';
 
-	switch (stateTodo) {
-		case STATE_TODO.IS_READY:
-			content = (
-				<>
-					<Checkbox
-						className="checkmark"
-						icon="✔"
-						checked={completed}
-						setChecked={() => {
-							setStateTodo(STATE_TODO.IS_UPDATING);
-							setTodo(title, !completed);
-						}}
-					/>
-					<p className={styles.text}>{title}</p>
-					<ControlBtns
-						handleRedact={() => setStateTodo(STATE_TODO.IS_REDACTING)}
-						handleDelete={() => {
-							setStateTodo(STATE_TODO.IS_DELETING);
-							deleteTodo();
-						}}
-					/>
-				</>
-			);
-			break;
-
-		case STATE_TODO.IS_REDACTING:
-			content = (
-				<FormEditTodo
-					onSubmit={onSubmitEditTodo}
-					inputRef={inputRedactRef}
-					onChange={(e) => setValue(e.target.value)}
-					onBlur={() => {
-						validateInput(value.trim());
-						setValue('');
+	if (uddatingTodosIDs.includes(id)) {
+		content = 'loading...';
+	} else if (redactingTodoID === id) {
+		content = (
+			<FormEditTodo
+				onSubmit={onSubmitEditTodo}
+				inputRef={inputRedactRef}
+				onChange={(e) => updateState('inputEditTodoValue', e.target.value)}
+				onBlur={() => {
+					validateInput(inputEditTodoValue.trim());
+					updateState('inputEditTodoValue', '');
+					updateState('redactingTodoID', null);
+				}}
+			/>
+		);
+	} else {
+		content = (
+			<>
+				<Checkbox
+					className="checkmark"
+					icon="✔"
+					checked={completed}
+					setChecked={() => {
+						setTodo(title, !completed);
 					}}
 				/>
-			);
-			break;
-
-		case STATE_TODO.IS_DELETING:
-		case STATE_TODO.IS_UPDATING:
-		case STATE_TODO.IS_CREATING:
-			content = 'loading...';
-			break;
-
-		default:
-			break;
+				<p className={styles.text}>{title}</p>
+				<ControlBtns todoID={id} />
+			</>
+		);
 	}
+
 	return (
 		<li
 			className={

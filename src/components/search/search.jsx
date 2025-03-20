@@ -1,6 +1,10 @@
+import { useStateManager } from '../../stateManager';
 import styles from './search.module.scss';
 
-export const Search = ({ value, setValue, placeholder }) => {
+export const Search = ({ placeholder }) => {
+	const { state, updateState } = useStateManager();
+	const { inputSearchValue } = state;
+
 	return (
 		<form
 			action="#"
@@ -9,9 +13,9 @@ export const Search = ({ value, setValue, placeholder }) => {
 		>
 			<input
 				type="text"
-				value={value}
+				value={inputSearchValue}
 				onChange={(e) => {
-					setValue(e.target.value);
+					updateState('inputSearchValue', e.target.value);
 				}}
 				className={styles.inputAdd}
 				name="search"
@@ -31,12 +35,12 @@ export const Search = ({ value, setValue, placeholder }) => {
 				/>
 			</svg>
 
-			{value && (
+			{inputSearchValue && (
 				<button
 					className={styles.clearBtn}
 					type="button"
 					onClick={() => {
-						setValue('');
+						updateState('inputSearchValue', '');
 					}}
 				>
 					✖

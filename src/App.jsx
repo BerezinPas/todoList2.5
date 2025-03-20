@@ -1,28 +1,29 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import styles from './App.module.scss';
 import { ToDoListItem, Search, HeadlineTodoList } from './components';
 import { sortHandler } from './utils';
-import {
-	useRequestDeleteTodo,
-	useRequestGetTodos,
-	useRequestSetTodo,
-	useRequestCreateTodo,
-} from './hooks';
+import { requestGetTodos } from './api';
 import { FormAddTodo } from './components';
+import { useStateManager } from './stateManager';
 
 function App() {
-	const { todos, isloading, setTodos } = useRequestGetTodos();
-	const { deleteTodo } = useRequestDeleteTodo(setTodos);
-	const { setTodo } = useRequestSetTodo(setTodos);
-	const { createTodo } = useRequestCreateTodo(setTodos);
+	const { updateState, state } = useStateManager();
+	const { isLoading, todos, inputSearchValue, shouldSort } = state;
 
-	const [searchValue, setSearchValue] = useState('');
-	const [shouldSort, setShouldSort] = useState(false);
+	const filtredTodos = todos.filter(({ title }) =>
+		title.includes(inputSearchValue),
+	);
 
-	const filtredTodos = todos.filter(({ title }) => title.includes(searchValue));
+	useEffect(() => {
+		requestGetTodos()
+			.then((todos) => {
+				updateState('todos', todos);
+			})
+			.then(() => updateState('isLoading', false));
+	}, []);
 
 	let content;
-	if (isloading) {
+	if (isLoading) {
 		content = <div className={styles.loader}> </div>;
 	} else if (todos.length === 0) {
 		content = <p>TodoList is Empty</p>;
@@ -32,30 +33,17 @@ function App() {
 		content = filtredTodos
 			.sort((a, b) => shouldSort && sortHandler(a.title, b.title))
 			.map(({ completed, id, title }) => (
-				<ToDoListItem
-					key={id}
-					completed={completed}
-					title={title}
-					deleteTodo={() => deleteTodo(id)}
-					setTodo={(title, completed) => setTodo(id, title, completed)}
-				/>
+				<ToDoListItem key={id} completed={completed} title={title} id={id} />
 			));
 	}
 
 	return (
 		<div className={styles.container}>
 			<div className={styles.todolist}>
-				<Search
-					placeholder="Search"
-					value={searchValue}
-					setValue={setSearchValue}
-				/>
-				<HeadlineTodoList
-					checked={shouldSort}
-					handlerSortBtn={() => setShouldSort((prev) => !prev)}
-				/>
+				<Search placeholder="Search" />
+				<HeadlineTodoList />
 				<ul className={styles.todos}>{content}</ul>
-				<FormAddTodo onSubmit={(val) => createTodo(val)} />
+				<FormAddTodo />
 			</div>
 		</div>
 	);

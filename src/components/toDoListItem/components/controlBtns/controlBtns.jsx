@@ -1,9 +1,26 @@
+import { requestDeleteTodo } from '../../../../api';
+import { useStateManager } from '../../../../stateManager';
 import styles from './controlBtns.module.scss';
 
-export const ControlBtns = ({ handleRedact, handleDelete }) => {
+export const ControlBtns = ({ todoID }) => {
+	const { deleteTodoFetch } = requestDeleteTodo();
+
+	const { deleteTodo, updateState, state } = useStateManager();
+	const { uddatingTodosIDs } = state;
+
+	const handleDelete = () => {
+		updateState('uddatingTodosIDs', [...uddatingTodosIDs, todoID]);
+		deleteTodoFetch(todoID).then(() => {
+			deleteTodo(todoID);
+		});
+	};
+
 	return (
 		<>
-			<button onClick={() => handleRedact()} className={styles.editBtn}>
+			<button
+				onClick={() => updateState('redactingTodoID', todoID)}
+				className={styles.editBtn}
+			>
 				<svg
 					width="21"
 					height="17"

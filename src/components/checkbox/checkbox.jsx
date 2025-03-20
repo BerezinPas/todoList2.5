@@ -2,10 +2,9 @@ import styles from './checkbox.module.scss';
 
 export const Checkbox = ({ checked, setChecked, icon, className }) => {
 	return (
-		<label className={`${styles.checkbox}`} onClick={() => setChecked()}>
+		<label className={`${styles.checkbox}`}>
 			<input
 				type="checkbox"
-				value={true}
 				checked={checked}
 				onChange={() => setChecked()}
 				className={styles.checkboxInput}
