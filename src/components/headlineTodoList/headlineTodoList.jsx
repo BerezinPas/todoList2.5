@@ -1,12 +1,12 @@
-import { useStateManager } from '../../stateManager';
+import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox } from '../checkbox/checkbox';
 import styles from './headlineTodoList.module.scss';
+import { selectShouldSort } from '../../selectors';
+import { setShouldSort } from '../../actions/optionsActions';
 
 export const HeadlineTodoList = () => {
-	const {
-		state: { shouldSort },
-		updateState,
-	} = useStateManager();
+	const shouldSort = useSelector(selectShouldSort);
+	const dispatch = useDispatch();
 
 	return (
 		<h2 className={styles.title}>
@@ -16,7 +16,7 @@ export const HeadlineTodoList = () => {
 				icon="⇅"
 				checked={shouldSort}
 				setChecked={() => {
-					updateState('shouldSort', !shouldSort);
+					dispatch(setShouldSort(!shouldSort));
 				}}
 			/>
 		</h2>

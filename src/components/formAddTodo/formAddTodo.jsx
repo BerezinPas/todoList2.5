@@ -1,18 +1,14 @@
 import styles from './formAddTodo.module.scss';
-import { useStateManager } from '../../stateManager';
-import { requestCreateTodo } from '../../api';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectInputAddValue } from '../../selectors';
+import { createTodo } from '../../actions/todosActions';
+import { setInputAddValue } from '../../actions/optionsActions';
 
 export const FormAddTodo = () => {
-	const { createTodoFetch } = requestCreateTodo();
+	const dispatch = useDispatch();
+	const inputAddTodoValue = useSelector(selectInputAddValue);
 
-	const {
-		state: { inputAddTodoValue },
-		updateState,
-		createTodo,
-	} = useStateManager();
-
-	const onSubmit = (val) =>
-		createTodoFetch(val).then((todo) => createTodo(todo));
+	const onSubmit = (val) => dispatch(createTodo(val));
 
 	return (
 		<form
@@ -22,7 +18,7 @@ export const FormAddTodo = () => {
 				e.preventDefault();
 				const val = e.target.title.value.trim();
 				if (val) {
-					updateState('inputAddTodoValue', '');
+					dispatch(setInputAddValue(''));
 					onSubmit(val);
 				}
 			}}
@@ -31,7 +27,7 @@ export const FormAddTodo = () => {
 				type="text"
 				className={styles.inputAdd}
 				name="title"
-				onChange={(e) => updateState('inputAddTodoValue', e.target.value)}
+				onChange={(e) => dispatch(setInputAddValue(e.target.value))}
 				value={inputAddTodoValue}
 				placeholder="write a task.."
 			/>

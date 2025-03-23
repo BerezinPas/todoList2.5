@@ -1,13 +1,8 @@
 import { URL } from '../constants';
 
-export const requestDeleteTodo = () => {
-	const deleteTodoFetch = (id) => {
-		const url = `${URL}/${id}`;
-		console.log('url', url);
-
-		return fetch(url, {
-			method: 'DELETE',
-		});
-	};
-	return { deleteTodoFetch };
+export const requestDeleteTodo = (id) => {
+	const fetchURL = `${URL}/${id}`;
+	return fetch(fetchURL, {
+		method: 'DELETE',
+	});
 };

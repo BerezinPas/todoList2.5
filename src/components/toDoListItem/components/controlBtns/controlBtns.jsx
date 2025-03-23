@@ -1,24 +1,20 @@
-import { requestDeleteTodo } from '../../../../api';
-import { useStateManager } from '../../../../stateManager';
+import { useDispatch } from 'react-redux';
 import styles from './controlBtns.module.scss';
+import { setEditTodoID } from '../../../../actions/editActions';
+import { addUpdatingId, deleteTodo } from '../../../../actions/todosActions';
 
 export const ControlBtns = ({ todoID }) => {
-	const { deleteTodoFetch } = requestDeleteTodo();
+	const dispatch = useDispatch();
 
-	const { deleteTodo, updateState, state } = useStateManager();
-	const { uddatingTodosIDs } = state;
-
-	const handleDelete = () => {
-		updateState('uddatingTodosIDs', [...uddatingTodosIDs, todoID]);
-		deleteTodoFetch(todoID).then(() => {
-			deleteTodo(todoID);
-		});
+	const handlerDelete = () => {
+		dispatch(addUpdatingId(todoID));
+		dispatch(deleteTodo(todoID));
 	};
 
 	return (
 		<>
 			<button
-				onClick={() => updateState('redactingTodoID', todoID)}
+				onClick={() => dispatch(setEditTodoID(todoID))}
 				className={styles.editBtn}
 			>
 				<svg
@@ -34,7 +30,7 @@ export const ControlBtns = ({ todoID }) => {
 					/>
 				</svg>
 			</button>
-			<button onClick={handleDelete} className={styles.deleteBtn}>
+			<button onClick={handlerDelete} className={styles.deleteBtn}>
 				<svg
 					width="12"
 					height="17"

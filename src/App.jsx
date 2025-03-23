@@ -2,25 +2,30 @@ import { useEffect } from 'react';
 import styles from './App.module.scss';
 import { ToDoListItem, Search, HeadlineTodoList } from './components';
 import { sortHandler } from './utils';
-import { requestGetTodos } from './api';
 import { FormAddTodo } from './components';
-import { useStateManager } from './stateManager';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	selectIsLoading,
+	selectSearchValue,
+	selectShouldSort,
+	selectTodos,
+} from './selectors';
+import { fetchTodos } from './actions/todosActions';
 
 function App() {
-	const { updateState, state } = useStateManager();
-	const { isLoading, todos, inputSearchValue, shouldSort } = state;
+	const dispatch = useDispatch();
+	useEffect(() => {
+		dispatch(fetchTodos);
+	}, []);
+
+	const todos = useSelector(selectTodos);
+	const isLoading = useSelector(selectIsLoading);
+	const shouldSort = useSelector(selectShouldSort);
+	const inputSearchValue = useSelector(selectSearchValue);
 
 	const filtredTodos = todos.filter(({ title }) =>
 		title.includes(inputSearchValue),
 	);
-
-	useEffect(() => {
-		requestGetTodos()
-			.then((todos) => {
-				updateState('todos', todos);
-			})
-			.then(() => updateState('isLoading', false));
-	}, []);
 
 	let content;
 	if (isLoading) {

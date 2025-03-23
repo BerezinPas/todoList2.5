@@ -1,9 +1,11 @@
-import { useStateManager } from '../../stateManager';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './search.module.scss';
+import { selectSearchValue } from '../../selectors';
+import { setSearchValue } from '../../actions/optionsActions';
 
 export const Search = ({ placeholder }) => {
-	const { state, updateState } = useStateManager();
-	const { inputSearchValue } = state;
+	const inputSearchValue = useSelector(selectSearchValue);
+	const dispatch = useDispatch();
 
 	return (
 		<form
@@ -15,7 +17,7 @@ export const Search = ({ placeholder }) => {
 				type="text"
 				value={inputSearchValue}
 				onChange={(e) => {
-					updateState('inputSearchValue', e.target.value);
+					dispatch(setSearchValue(e.target.value));
 				}}
 				className={styles.inputAdd}
 				name="search"
@@ -40,7 +42,7 @@ export const Search = ({ placeholder }) => {
 					className={styles.clearBtn}
 					type="button"
 					onClick={() => {
-						updateState('inputSearchValue', '');
+						dispatch(setSearchValue(''));
 					}}
 				>
 					✖

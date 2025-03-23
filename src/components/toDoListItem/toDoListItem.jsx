@@ -1,22 +1,25 @@
 import { useEffect, useRef } from 'react';
 import { FormEditTodo, ControlBtns, Checkbox } from '../../components';
-
 import styles from './toDoListItem.module.scss';
-import { useStateManager } from '../../stateManager';
-import { requestSetTodo } from '../../api';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	selectEditInputValue,
+	selectEditTodoID,
+	selectUpdatingTodosIDs,
+} from '../../selectors';
+import { addUpdatingId, updateTodo } from '../../actions/todosActions';
+import { setEditTodoID, setInputEditValue } from '../../actions/editActions';
 
 export const ToDoListItem = ({ title, completed, id, ...props }) => {
-	const { setTodo: setTodoFetch } = requestSetTodo();
+	const inputEditTodoValue = useSelector(selectEditInputValue);
+	const updatingTodosIDs = useSelector(selectUpdatingTodosIDs);
+	const redactingTodoID = useSelector(selectEditTodoID);
 
-	const { updateTodo, updateState, state } = useStateManager();
-	const { inputEditTodoValue, uddatingTodosIDs, redactingTodoID } = state;
+	const dispatch = useDispatch();
 
 	const setTodo = (title, completed) => {
-		updateState('uddatingTodosIDs', [...uddatingTodosIDs, id]);
-
-		setTodoFetch(id, title, completed).then((updatedTodo) => {
-			updateTodo(updatedTodo);
-		});
+		dispatch(addUpdatingId(id));
+		dispatch(updateTodo({ title, completed, id }));
 	};
 
 	const validateInput = (val) => {
@@ -28,7 +31,7 @@ export const ToDoListItem = ({ title, completed, id, ...props }) => {
 	const onSubmitEditTodo = (e) => {
 		e.preventDefault();
 		validateInput(inputEditTodoValue.trim());
-		updateState('inputEditTodoValue', '');
+		dispatch(setInputEditValue(''));
 	};
 
 	const inputRedactRef = useRef(null);
@@ -37,22 +40,22 @@ export const ToDoListItem = ({ title, completed, id, ...props }) => {
 		if (id === redactingTodoID && inputRedactRef.current) {
 			inputRedactRef.current.focus();
 		}
-	}, [redactingTodoID]);
+	}, [redactingTodoID, id]);
 
 	let content = '';
 
-	if (uddatingTodosIDs.includes(id)) {
+	if (updatingTodosIDs.includes(id)) {
 		content = 'loading...';
 	} else if (redactingTodoID === id) {
 		content = (
 			<FormEditTodo
 				onSubmit={onSubmitEditTodo}
 				inputRef={inputRedactRef}
-				onChange={(e) => updateState('inputEditTodoValue', e.target.value)}
+				onChange={(e) => dispatch(setInputEditValue(e.target.value))}
 				onBlur={() => {
 					validateInput(inputEditTodoValue.trim());
-					updateState('inputEditTodoValue', '');
-					updateState('redactingTodoID', null);
+					dispatch(setInputEditValue(''));
+					dispatch(setEditTodoID(null));
 				}}
 			/>
 		);
